@@ -1,4 +1,4 @@
-from pip._vendor import pkg_resources
+import pkg_resources
 
 
 def srs(t):

@@ -1,26 +1,33 @@
-import pkg_resources
+import requests as rq
+L = []
+def normalize(s):
+    if ' ' in s:
+        s = s[:s.index(' ')]
+    if '[' in s:
+        s = s[:s.index('[')]
+    if ';' in s:
+        s = s[:s.index(';')]
 
+    return s
 
-def srs(t):
+def chek(pac):
+    #pac = normalize(pac)
     try:
-        _package = pkg_resources.working_set.by_key[t.replace('-', '_')]
+        url = 'https://pypi.org/pypi/'+pac+'/json'
+        json = rq.get(url).json()
+        m = json['info']['requires_dist']
+        # print(json['info']['requires_dist'])
+        if m != None:
+            for el in m:
+                el = normalize(el)
+                print("\"" +pac+ "\"" + '->' + "\"" + el + "\"")
+                if el not in L:
+                    L.append(el)
+                    chek(el)
 
-        for el in _package.requires():
-            eln = str(el)
-            try:
-                eln = eln[:eln.index('=') - 1]
-            except ValueError:
-                pass
-
-            eln = eln.replace('-', '_')
-            print(str(t) + '->' + "\"" + eln + "\"")
-            srs(eln)
-
-    except KeyError:
-        pass
-
-
-pack = input(':')
+    except Exception as ex:
+        print(' ! чет пошло не так ! ', ex,"pac = ",pac)
+zn = input(': ')
 print('digraph G {')
-srs(pack)
+chek(zn)
 print('}')

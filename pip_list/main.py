@@ -23,7 +23,7 @@ def chek(pac):
         if m != None:
             for el in m:
                 el = normalize(el)
-                print("\"" + pac + "\"" + '->' + "\"" + el + "\"")
+                print("\"" + pac + "\"" + '<-' + "\"" + el + "\"")
                 if el not in L:
                     L.append(el)
                     chek(el)

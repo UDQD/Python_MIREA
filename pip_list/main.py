@@ -16,17 +16,19 @@ def normalize(s):
 
 def chek(pac):
     try:
+
         url = 'https://pypi.org/pypi/' + pac + '/json'
         json = rq.get(url).json()
         m = json['info']['requires_dist']
 
         if m != None:
             for el in m:
-                el = normalize(el)
-                print("\"" + pac + "\"" + '<-' + "\"" + el + "\"")
-                if el not in L:
-                    L.append(el)
-                    chek(el)
+                if 'extra' not in el:
+                    el = normalize(el)
+                    print("\"" + pac + "\"" + '<-' + "\"" + el + "\"")
+                    if el not in L:
+                        L.append(el)
+                        chek(el)
 
     except Exception as ex:
         print(' ! чет пошло не так ! ', ex, "pac = ", pac)
